@@ -1,0 +1,335 @@
+/* ==========================================================================
+   MATCH COMPONENT STYLES
+   Visualización directa del partido en el cuadro del día (sin contenedor interno)
+   ========================================================================== */
+
+.match-card {
+  /* Ya NO es un contenedor tipo caja cerrada con fondo ni bordes */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 2px;
+}
+
+.match-card:focus-visible {
+  outline: 2px solid var(--boca-gold-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   ESCUDO DEL RIVAL (Lo principal y más grande del cuadro del día)
+   ========================================================================== */
+
+.match-shield-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px auto 0;
+  flex-shrink: 0;
+}
+
+.opponent-badge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Escudo SVG generado: grande, nítido y con sombra heráldica */
+.shield-svg {
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.55));
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+}
+
+.calendar-day-cell:hover .shield-svg,
+.match-card:hover .shield-svg {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
+}
+
+/* Escudo por imagen real: sin contenedor, fondo transparente y sombra natural sobre el escudo */
+.opponent-badge-container.badge-img-wrapper {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: none;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.opponent-badge-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+}
+
+.calendar-day-cell:hover .opponent-badge-img,
+.match-card:hover .opponent-badge-img,
+.calendar-day-cell:hover .badge-img-wrapper,
+.match-card:hover .badge-img-wrapper {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.85));
+}
+
+/* ==========================================================================
+   NOMBRE DEL RIVAL
+   ========================================================================== */
+
+.match-opponent-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.15;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+  margin: 1px 0 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   CONDICIÓN (V o L) Y HORARIO PEQUEÑO
+   ========================================================================== */
+
+.match-info-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+/* Badge circular de condición V o L */
+.match-venue-badge {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.match-venue-badge.venue-local {
+  background: var(--boca-gold-primary);
+  color: #001B44;
+  box-shadow: 0 1px 5px rgba(255, 199, 0, 0.45);
+}
+
+.match-venue-badge.venue-away {
+  background: #5BA4FC;
+  color: #03142E;
+  box-shadow: 0 1px 5px rgba(91, 164, 252, 0.45);
+}
+
+.match-venue-badge.venue-neutral {
+  background: #E5E7EB;
+  color: #111827;
+  box-shadow: 0 1px 5px rgba(229, 231, 235, 0.3);
+}
+
+/* Horario en tamaño más pequeño */
+.match-time {
+  font-size: 0.67rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================================================
+   COMPETICIÓN (Línea sutil inferior)
+   ========================================================================== */
+
+.match-competition-row {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.match-competition {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   BOTONES DE ACCIÓN RÁPIDA (Editar / Eliminar)
+   Flotantes y visibles al pasar el ratón sobre el día
+   ========================================================================== */
+
+.match-card-actions {
+  position: absolute;
+  top: -24px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+
+.calendar-day-cell:hover .match-card-actions,
+.calendar-day-cell:focus-within .match-card-actions,
+.match-card:hover .match-card-actions,
+.match-card:focus-within .match-card-actions {
+  opacity: 1;
+}
+
+.match-action-btn {
+  background: rgba(8, 26, 51, 0.85);
+  border: 1px solid var(--boca-blue-border);
+  color: var(--text-muted);
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.match-action-btn.edit-btn:hover {
+  background: rgba(255, 199, 0, 0.25);
+  border-color: var(--boca-gold-primary);
+  color: var(--boca-gold-primary);
+}
+
+.match-action-btn.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+/* ==========================================================================
+   VISTA PREVIA EN EL MODAL DE CREACIÓN / EDICIÓN
+   ========================================================================== */
+
+.preview-cell-styled {
+  background: #081a33;
+  border: 1px solid var(--boca-blue-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  max-width: 170px;
+  margin: 0 auto;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.preview-cell-styled.venue-local {
+  border-top: 3px solid var(--boca-gold-primary);
+  background: linear-gradient(180deg, rgba(255, 199, 0, 0.1) 0%, #081a33 60%);
+}
+
+.preview-cell-styled.venue-away {
+  border-top: 3px solid #5BA4FC;
+  background: linear-gradient(180deg, rgba(91, 164, 252, 0.1) 0%, #081a33 60%);
+}
+
+.preview-cell-styled.venue-neutral {
+  border-top: 3px solid #D1D5DB;
+  background: linear-gradient(180deg, rgba(209, 213, 219, 0.1) 0%, #081a33 60%);
+}
+
+/* ==========================================================================
+   ADAPTACIONES RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  .shield-svg {
+    transform: scale(0.92);
+  }
+
+  .opponent-badge-container.badge-img-wrapper {
+    width: 58px !important;
+    height: 58px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .match-card-actions {
+    opacity: 1; /* Siempre visible en touch */
+    top: -20px;
+  }
+
+  .shield-svg {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+
+  .opponent-badge-container.badge-img-wrapper {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .match-opponent-name {
+    font-size: 0.74rem;
+  }
+
+  .match-time {
+    font-size: 0.62rem;
+  }
+
+  .match-venue-badge {
+    width: 16px;
+    height: 16px;
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .shield-svg {
+    transform: scale(0.75);
+  }
+
+  .opponent-badge-container.badge-img-wrapper {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .match-competition-row {
+    display: none; /* Simplificar en pantallas ultra pequeñas */
+  }
+}

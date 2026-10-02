@@ -1,0 +1,585 @@
+/* ==========================================================================
+   CALENDAR COMPONENT STYLES
+   Cuadrícula de 7 columnas (Lunes a Domingo), celdas de días y adaptación
+   ========================================================================== */
+
+/* ==========================================================================
+   CONTENEDOR DE MESES (SOPORTE VISTA 1, 2, 3 O 6 MESES)
+   ========================================================================== */
+
+.calendar-months-container {
+  display: grid;
+  gap: 22px;
+  width: 100%;
+}
+
+.calendar-months-container.view-months-1 {
+  grid-template-columns: 1fr;
+}
+
+.calendar-months-container.view-months-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+}
+
+.calendar-months-container.view-months-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+}
+
+.calendar-months-container.view-months-6 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+}
+
+/* Tarjeta individual de cada mes */
+.calendar-month-card,
+.calendar-main-card {
+  background: rgba(7, 22, 44, 0.7);
+  border: 1px solid var(--boca-blue-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.calendar-month-card:hover {
+  border-color: rgba(91, 164, 252, 0.35);
+}
+
+/* Cabecera del mes para vistas multi-mes (2, 3 o 6 meses) */
+.calendar-month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #091f3d 0%, #06162d 100%);
+  border-bottom: 1px solid var(--boca-blue-border);
+}
+
+.month-header-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+
+.month-header-title .month-name {
+  color: #FFFFFF;
+}
+
+.month-header-title .month-year {
+  color: var(--boca-gold-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.month-header-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 199, 0, 0.14);
+  border: 1px solid rgba(255, 199, 0, 0.35);
+  color: var(--boca-gold-primary);
+  white-space: nowrap;
+}
+
+/* Fila de encabezados de los días (Lunes a Domingo) */
+.calendar-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--boca-blue-surface);
+  border-bottom: 2px solid var(--boca-blue-border);
+  position: relative;
+}
+
+.calendar-weekday-title {
+  padding: 12px 6px;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--boca-gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Grilla de días */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  background-color: var(--boca-blue-border);
+  gap: 1px;
+  /* Produce los bordes limpios entre celdas */
+  width: 100%;
+}
+
+/* En vista multi-mes, la grilla ocupa todo el alto disponible para nivelar los meses */
+.view-months-2 .calendar-grid,
+.view-months-3 .calendar-grid,
+.view-months-6 .calendar-grid {
+  flex: 1;
+  align-content: stretch;
+}
+
+/* Celda individual de día */
+.calendar-day-cell {
+  background: #081a33;
+  min-height: 172px;
+  padding: 7px 7px 9px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.calendar-day-cell:hover {
+  background: #0b2244;
+}
+
+/* Celda con partido: interactiva y acentuada directamente */
+.calendar-day-cell.has-matches {
+  cursor: pointer;
+}
+
+.calendar-day-cell.has-matches:hover {
+  background: #0d284f;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Acentos visuales directos en el cuadro del día según Local o Visitante */
+.calendar-day-cell.has-matches.venue-local {
+  border-top: 3px solid var(--boca-gold-primary);
+  background: linear-gradient(180deg, rgba(255, 199, 0, 0.09) 0%, #081a33 60%);
+}
+
+.calendar-day-cell.has-matches.venue-local:hover {
+  background: linear-gradient(180deg, rgba(255, 199, 0, 0.15) 0%, #0d284f 60%);
+}
+
+.calendar-day-cell.has-matches.venue-away {
+  border-top: 3px solid #5BA4FC;
+  background: linear-gradient(180deg, rgba(91, 164, 252, 0.09) 0%, #081a33 60%);
+}
+
+.calendar-day-cell.has-matches.venue-away:hover {
+  background: linear-gradient(180deg, rgba(91, 164, 252, 0.15) 0%, #0d284f 60%);
+}
+
+.calendar-day-cell.has-matches.venue-neutral {
+  border-top: 3px solid #D1D5DB;
+  background: linear-gradient(180deg, rgba(209, 213, 219, 0.09) 0%, #081a33 60%);
+}
+
+.calendar-day-cell.has-matches.venue-neutral:hover {
+  background: linear-gradient(180deg, rgba(209, 213, 219, 0.15) 0%, #0d284f 60%);
+}
+
+/* Scrollbar estilizado en la celda del día por si hay más de un partido */
+.calendar-day-cell::-webkit-scrollbar {
+  width: 3px;
+}
+
+.calendar-day-cell::-webkit-scrollbar-thumb {
+  background: var(--boca-blue-light);
+  border-radius: 4px;
+}
+
+/* Días de otros meses (anterior / siguiente) más tenues */
+.calendar-day-cell.other-month {
+  background: #051020;
+  opacity: 0.45;
+}
+
+.calendar-day-cell.other-month:hover {
+  opacity: 0.75;
+}
+
+.calendar-day-cell.other-month .day-number {
+  color: var(--text-muted);
+}
+
+/* En vistas multi-mes, los días de relleno mantienen su celda visible
+   (como celda vacía) para que el día 1 quede alineado en la columna
+   correcta de su día de la semana. Solo se oculta su contenido. */
+.view-months-2 .calendar-day-cell.other-month,
+.view-months-3 .calendar-day-cell.other-month,
+.view-months-6 .calendar-day-cell.other-month {
+  background: #081a33;
+  pointer-events: none;
+  border-top: none;
+  box-shadow: none;
+  opacity: 1;
+}
+
+.view-months-2 .calendar-day-cell.other-month > *,
+.view-months-3 .calendar-day-cell.other-month > *,
+.view-months-6 .calendar-day-cell.other-month > * {
+  display: none;
+}
+
+/* Día de hoy */
+.calendar-day-cell.is-today {
+  background: #0c244b;
+  box-shadow: inset 0 0 0 2px var(--boca-gold-primary);
+}
+
+.calendar-day-cell.is-today .day-number {
+  color: var(--boca-gold-primary);
+  font-weight: 900;
+}
+
+/* Ventana FIFA – número del día en rojo */
+.calendar-day-cell.fifa-window .day-number {
+  color: #e53935;
+  font-weight: 800;
+}
+
+/* Si hoy cae en ventana FIFA, prevalece el dorado */
+.calendar-day-cell.is-today.fifa-window .day-number {
+  color: var(--boca-gold-primary);
+}
+
+/* Cabecera interna del día (número + botón rápido + badge hoy) */
+.day-cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+.day-number {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.today-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: var(--boca-gold-primary);
+  color: #051329;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Botón rápido '+' en cada día */
+.day-add-quick-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.calendar-day-cell:hover .day-add-quick-btn,
+.calendar-day-cell:focus-within .day-add-quick-btn {
+  opacity: 1;
+}
+
+.day-add-quick-btn:hover {
+  background: rgba(255, 199, 0, 0.2);
+  color: var(--boca-gold-primary);
+}
+
+/* ==========================================================================
+   PANEL RESUMEN PARA DISPOSITIVOS MÓVILES
+   ========================================================================== */
+
+.mobile-day-summary-container {
+  display: none;
+  /* Se activa en media queries móviles */
+  margin-top: 14px;
+}
+
+.mobile-day-card {
+  background: var(--boca-blue-surface);
+  border: 1px solid var(--boca-blue-border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.mobile-day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--boca-gold-primary);
+  margin-bottom: 8px;
+}
+
+.mobile-add-btn {
+  background: rgba(255, 199, 0, 0.15);
+  border: 1px solid rgba(255, 199, 0, 0.4);
+  color: var(--boca-gold-primary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.empty-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   ADAPTACIÓN DE CELDAS SEGÚN VISTA MULTI-MES (2, 3 O 6 MESES)
+   ========================================================================== */
+
+/* Adaptación de celdas en vista 2 meses (Bimestre) */
+.view-months-2 .calendar-day-cell {
+  min-height: 135px;
+  padding: 6px 5px 8px;
+}
+
+.view-months-2 .day-number {
+  font-size: 0.88rem;
+}
+
+.view-months-2 .match-opponent-name {
+  font-size: 0.78rem;
+}
+
+.view-months-2 .match-venue-badge {
+  width: 17px;
+  height: 17px;
+  font-size: 0.65rem;
+}
+
+.view-months-2 .match-time {
+  font-size: 0.62rem;
+}
+
+.view-months-2 .calendar-weekday-title {
+  font-size: 0.76rem;
+  padding: 10px 4px;
+}
+
+/* Adaptación de celdas en vista 3 meses (Trimestre) */
+.view-months-3 .calendar-day-cell {
+  min-height: 110px;
+  padding: 5px 3px 6px;
+}
+
+.view-months-3 .calendar-weekday-title {
+  font-size: 0.74rem;
+  padding: 8px 2px;
+  letter-spacing: 0;
+}
+
+.view-months-3 .day-number {
+  font-size: 0.82rem;
+}
+
+.view-months-3 .match-opponent-name {
+  font-size: 0.72rem;
+  margin-top: 0;
+}
+
+.view-months-3 .match-venue-badge {
+  width: 16px;
+  height: 16px;
+  font-size: 0.60rem;
+}
+
+.view-months-3 .match-time {
+  font-size: 0.60rem;
+  gap: 2px;
+}
+
+.view-months-3 .match-competition-row {
+  display: none;
+}
+
+.view-months-3 .match-card-actions {
+  top: -18px;
+}
+
+.view-months-3 .match-action-btn {
+  width: 18px;
+  height: 18px;
+}
+
+/* Adaptación de celdas en vista 6 meses (Semestre) */
+.view-months-6 .calendar-day-cell {
+  min-height: 96px;
+  padding: 4px 2px 5px;
+}
+
+.view-months-6 .calendar-weekday-title {
+  font-size: 0.70rem;
+  padding: 7px 2px;
+  letter-spacing: 0;
+}
+
+.view-months-6 .day-number {
+  font-size: 0.78rem;
+}
+
+.view-months-6 .today-pill {
+  font-size: 0.58rem;
+  padding: 0 3px;
+}
+
+.view-months-6 .match-opponent-name {
+  font-size: 0.68rem;
+  margin-top: 0;
+}
+
+.view-months-6 .match-venue-badge {
+  width: 15px;
+  height: 15px;
+  font-size: 0.56rem;
+}
+
+.view-months-6 .match-time {
+  font-size: 0.58rem;
+  gap: 2px;
+}
+
+.view-months-6 .match-competition-row {
+  display: none;
+}
+
+.view-months-6 .day-add-quick-btn {
+  width: 18px;
+  height: 18px;
+}
+
+.view-months-6 .match-card-actions {
+  top: -16px;
+}
+
+.view-months-6 .match-action-btn {
+  width: 16px;
+  height: 16px;
+}
+
+/* Breakpoint 1200px para vista de 3 y 6 meses */
+@media (max-width: 1200px) {
+
+  .calendar-months-container.view-months-3,
+  .calendar-months-container.view-months-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+
+  .calendar-months-container.view-months-2,
+  .calendar-months-container.view-months-3,
+  .calendar-months-container.view-months-6 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Tablets y Celulares)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  .calendar-day-cell {
+    min-height: 125px;
+    padding: 6px 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .calendar-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .calendar-nav-group {
+    justify-content: space-between;
+  }
+
+  .calendar-filters-group {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .calendar-weekday-title {
+    font-size: 0.72rem;
+    padding: 8px 2px;
+    letter-spacing: 0;
+  }
+
+  .calendar-day-cell {
+    min-height: 90px;
+    padding: 4px;
+  }
+
+  .day-add-quick-btn {
+    opacity: 1;
+    /* Siempre visible en touch */
+  }
+
+  .calendar-day-cell.selected-day {
+    box-shadow: inset 0 0 0 2px var(--boca-gold-primary);
+    background: #0f2d59;
+  }
+
+  .mobile-day-summary-container {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-wrapper {
+    padding: 10px 10px 24px;
+  }
+
+  .club-title {
+    font-size: 1.3rem;
+  }
+
+  .calendar-day-cell {
+    min-height: 75px;
+    padding: 3px;
+  }
+
+  .day-number {
+    font-size: 0.8rem;
+  }
+}

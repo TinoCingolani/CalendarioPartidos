@@ -1,0 +1,18 @@
+{
+  "name": "calendario-partidos-boca",
+  "version": "1.0.0",
+  "description": "Calendario mensual y agenda deportiva visual de partidos del Club Atlético Boca Juniors",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "boca-juniors",
+    "calendario",
+    "agenda-deportiva",
+    "futbol-argentino"
+  ],
+  "author": "",
+  "license": "MIT"
+}
