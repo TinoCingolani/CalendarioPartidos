@@ -128,7 +128,16 @@ export class Calendar {
         return;
       }
 
-      // 5. Clic en la celda del día (para móviles o selección rápida)
+      // 5. Clic en el recuadro del día compartido o en la celda del día (para móviles o selección rápida)
+      const splitCorner = e.target.closest('.split-day-corner');
+      if (splitCorner) {
+        const dateStr = splitCorner.dataset.date;
+        if (dateStr) {
+          this.selectDate(dateStr);
+          return;
+        }
+      }
+
       const dayCell = e.target.closest('.calendar-day-cell');
       if (dayCell) {
         const dateStr = dayCell.dataset.date;
@@ -203,7 +212,7 @@ export class Calendar {
 
   selectDate(dateStr) {
     this.selectedDateStr = dateStr;
-    document.querySelectorAll('.calendar-day-cell').forEach(cell => {
+    document.querySelectorAll('.calendar-day-cell, .split-day-corner').forEach(cell => {
       cell.classList.toggle('selected-day', cell.dataset.date === dateStr);
     });
     this.renderMobileDaySummary();
@@ -281,9 +290,17 @@ export class Calendar {
           if (this.filterCompetition && this.filterCompetition !== 'all') {
             dayMatches = dayMatches.filter(m => m.competition === this.filterCompetition);
           }
+          let splitMatches = [];
+          if (cellData.splitDay) {
+            splitMatches = this.state.getMatchesByDate(cellData.splitDay.dateStr);
+            if (this.filterCompetition && this.filterCompetition !== 'all') {
+              splitMatches = splitMatches.filter(m => m.competition === this.filterCompetition);
+            }
+          }
           gridHtml += renderDayCell(cellData, dayMatches, {
             shieldSize,
-            viewMonths: this.viewMonths
+            viewMonths: this.viewMonths,
+            splitMatches
           });
         });
 

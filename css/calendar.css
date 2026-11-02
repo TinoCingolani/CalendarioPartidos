@@ -114,11 +114,11 @@
   letter-spacing: 1px;
 }
 
-/* Grilla de días */
+/* Grilla de días (5 semanas uniformes con técnica 23/30) */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   background-color: var(--boca-blue-border);
   gap: 1px;
   /* Produce los bordes limpios entre celdas */
@@ -303,6 +303,91 @@
 .day-add-quick-btn:hover {
   background: rgba(255, 199, 0, 0.2);
   color: var(--boca-gold-primary);
+}
+
+/* ==========================================================================
+   DÍA COMPARTIDO / DESBORDE DE MES (TÉCNICA 23/30 EN ESQUINA INFERIOR DERECHA)
+   ========================================================================== */
+.calendar-day-cell.has-split-day {
+  padding-bottom: 30px;
+}
+
+.split-day-corner {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(4, 18, 38, 0.92);
+  border: 1px solid rgba(255, 199, 0, 0.45);
+  border-radius: 6px;
+  padding: 2px 7px;
+  z-index: 5;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.split-day-corner:hover {
+  background: rgba(9, 31, 61, 0.98);
+  border-color: var(--boca-gold-primary);
+  box-shadow: 0 0 10px rgba(255, 199, 0, 0.45);
+  transform: scale(1.05);
+}
+
+.split-day-corner .split-day-number {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--boca-gold-primary);
+  line-height: 1;
+}
+
+.split-day-corner.fifa-window .split-day-number {
+  color: #e53935;
+}
+
+.split-day-corner.is-today {
+  border-color: var(--boca-gold-primary);
+  background: rgba(255, 199, 0, 0.2);
+}
+
+.split-day-corner.selected-day {
+  border-color: #5BA4FC;
+  box-shadow: 0 0 10px rgba(91, 164, 252, 0.65);
+  background: rgba(91, 164, 252, 0.25);
+}
+
+.split-day-corner .split-add-btn {
+  opacity: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: 1px;
+}
+
+.split-day-corner:hover .split-add-btn,
+.split-day-corner:focus-within .split-add-btn {
+  opacity: 1;
+}
+
+/* Adaptaciones en vistas de 3 y 6 meses */
+.view-months-3 .split-day-corner,
+.view-months-6 .split-day-corner {
+  padding: 1px 4px;
+  bottom: 3px;
+  right: 3px;
+}
+
+.view-months-3 .split-day-corner .split-day-number,
+.view-months-6 .split-day-corner .split-day-number {
+  font-size: 0.78rem;
+}
+
+.view-months-3 .split-day-corner .split-add-btn,
+.view-months-6 .split-day-corner .split-add-btn {
+  width: 14px;
+  height: 14px;
 }
 
 /* ==========================================================================

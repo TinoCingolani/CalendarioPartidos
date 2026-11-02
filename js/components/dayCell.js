@@ -33,13 +33,20 @@ function isInFifaWindow(dateStr) {
 }
 
 export function renderDayCell(cellData, dayMatches = [], options = {}) {
-  const { dateStr, dayNumber, isCurrentMonth, isToday } = cellData;
+  const { dateStr, dayNumber, isCurrentMonth, isToday, splitDay } = cellData;
+  const { splitMatches = [] } = options;
   const hasMatches = dayMatches.length > 0;
+  const hasSplitMatches = splitMatches.length > 0;
   
   // Condición del primer partido para acentuar el cuadro del día directamente
   let venueClass = '';
   if (hasMatches && dayMatches[0]) {
     const v = dayMatches[0].venue;
+    if (v === 'Visitante') venueClass = 'venue-away';
+    else if (v === 'Neutral') venueClass = 'venue-neutral';
+    else venueClass = 'venue-local';
+  } else if (hasSplitMatches && splitMatches[0]) {
+    const v = splitMatches[0].venue;
     if (v === 'Visitante') venueClass = 'venue-away';
     else if (v === 'Neutral') venueClass = 'venue-neutral';
     else venueClass = 'venue-local';
@@ -49,21 +56,58 @@ export function renderDayCell(cellData, dayMatches = [], options = {}) {
     'calendar-day-cell',
     isCurrentMonth ? 'in-month' : 'other-month',
     isToday ? 'is-today' : '',
-    hasMatches ? 'has-matches' : '',
+    hasMatches || hasSplitMatches ? 'has-matches' : '',
     venueClass,
-    isInFifaWindow(dateStr) ? 'fifa-window' : ''
+    isInFifaWindow(dateStr) ? 'fifa-window' : '',
+    splitDay ? 'has-split-day' : ''
   ].filter(Boolean).join(' ');
 
   const matchesHtml = dayMatches
     .map(match => renderMatchCard(match, options))
     .join('');
 
+  let splitCornerHtml = '';
+  if (splitDay) {
+    const splitFifa = isInFifaWindow(splitDay.dateStr) ? 'fifa-window' : '';
+    const splitToday = splitDay.isToday ? 'is-today' : '';
+    const splitMatchesHtml = splitMatches
+      .map(match => renderMatchCard(match, { ...options, isSplitMatch: true, splitDayNumber: splitDay.dayNumber }))
+      .join('');
+
+    splitCornerHtml = `
+      <div 
+        class="split-day-corner ${splitToday} ${splitFifa} ${hasSplitMatches ? 'has-matches' : ''}" 
+        data-date="${splitDay.dateStr}"
+        role="button"
+        tabindex="0"
+        title="Día ${splitDay.dayNumber}"
+        aria-label="Día ${splitDay.dayNumber}"
+      >
+        <span class="split-day-number">${splitDay.dayNumber}</span>
+        <button 
+          type="button" 
+          class="day-add-quick-btn split-add-btn" 
+          data-action="add-on-date" 
+          data-date="${splitDay.dateStr}" 
+          title="Agregar partido el ${splitDay.dayNumber}"
+          aria-label="Agregar partido el día ${splitDay.dayNumber}"
+        >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+      ${splitMatchesHtml}
+    `;
+  }
+
   return `
     <div 
       class="${classes}" 
       data-date="${dateStr}"
       role="gridcell"
-      aria-label="${dayNumber} ${isToday ? '(Hoy)' : ''} ${hasMatches ? `- ${dayMatches.length} partido(s)` : ''}"
+      aria-label="${dayNumber} ${splitDay ? `y ${splitDay.dayNumber}` : ''} ${isToday ? '(Hoy)' : ''} ${hasMatches ? `- ${dayMatches.length} partido(s)` : ''}"
     >
       <div class="day-cell-header">
         <span class="day-number">${dayNumber}</span>
@@ -84,6 +128,7 @@ export function renderDayCell(cellData, dayMatches = [], options = {}) {
       </div>
 
       ${matchesHtml}
+      ${splitCornerHtml}
     </div>
   `.trim();
 }

@@ -30,6 +30,8 @@ export function getVenueDetails(venue) {
 export function renderMatchCard(match, options = {}) {
   const venue = getVenueDetails(match.venue);
   const shieldSize = options.shieldSize || 68;
+  const isSplit = Boolean(options.isSplitMatch);
+  const splitDayLabel = options.splitDayNumber ? `Día ${options.splitDayNumber}` : '';
   const badgeHtml = renderOpponentBadge(
     match.opponent,
     match.opponentPrimaryColor,
@@ -40,11 +42,12 @@ export function renderMatchCard(match, options = {}) {
 
   return `
     <article 
-      class="match-card ${venue.className}" 
+      class="match-card ${venue.className} ${isSplit ? 'split-day-match' : ''}" 
       data-id="${match.id}" 
       tabindex="0"
-      aria-label="Partido Boca Juniors vs ${match.opponent}, ${match.time}hs, ${venue.label}"
+      aria-label="Partido Boca Juniors vs ${match.opponent}, ${match.time}hs, ${venue.label}${isSplit ? ` (${splitDayLabel})` : ''}"
     >
+      ${isSplit ? `<div class="split-match-tag">${splitDayLabel}</div>` : ''}
       <!-- Acciones de edición rápida en la esquina superior -->
       <div class="match-card-actions">
         <button 

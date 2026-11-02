@@ -86,9 +86,22 @@ export function getMonthCalendarDays(year, month) {
     });
   }
 
-  // Rellenar hasta exactamente 42 celdas (6 filas × 7 colúmnas)
-  // Garantiza que todos los meses tengan la misma altura de cuadrícula
-  const totalTarget = 42;
+  // Si el mes se desborda a una 6ta fila (más de 35 celdas, como ocurre en Noviembre cuando el 30
+  // o 30 y 31 caen en la semana 6), se integran en la fila anterior (30 en el 23, 31 en el 24).
+  // De esta manera se elimina la 6ta fila innecesaria y la cuadrícula queda en 5 filas uniformes.
+  if (calendarCells.length > 35) {
+    const overflowCells = calendarCells.splice(35);
+    overflowCells.forEach((overflowCell, index) => {
+      const targetIndex = 28 + index; // 28 es el lunes de la 5ta fila (ej: día 23)
+      if (calendarCells[targetIndex]) {
+        calendarCells[targetIndex].splitDay = overflowCell;
+      }
+    });
+  }
+
+  // Rellenar hasta exactamente 35 celdas (5 filas × 7 columnas)
+  // Garantiza que todos los meses tengan la misma altura de cuadrícula de 5 semanas
+  const totalTarget = 35;
   const daysToAdd = totalTarget - calendarCells.length;
 
   for (let d = 1; d <= daysToAdd; d++) {

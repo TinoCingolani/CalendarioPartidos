@@ -333,3 +333,17 @@
     display: none; /* Simplificar en pantallas ultra pequeñas */
   }
 }
+
+/* Etiqueta distintiva cuando un partido cae en el día secundario/compartido (ej: Día 30) */
+.split-match-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--boca-gold-primary);
+  background: rgba(4, 18, 38, 0.9);
+  border: 1px solid rgba(255, 199, 0, 0.4);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-bottom: 2px;
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
